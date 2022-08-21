@@ -1,0 +1,11 @@
+<section class="row">
+  <div class="column">
+    <%= link "Create new game", to: Routes.game_path(@conn, :create), method: :post, class: "button" %>
+  </div>
+  <div class="column">
+   <form class="flex-inline">
+      <input type="text">
+      <input type="submit" value="Join">
+   </form>
+  </div>
+</section>
