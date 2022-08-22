@@ -9,12 +9,12 @@ defmodule PlanningPokerWeb.GameChannel do
 
   def handle_in("vote:set", %{"vote" => vote}, %{assigns: %{name: name}} = socket) do
     {:ok, _} = Presence.update(socket, name, %{vote: vote})
-    push(socket, "presence_state", Presence.list(socket))
     {:noreply, socket}
   end
 
   def handle_info(:after_join, %{assigns: %{name: name}} = socket) do
     {:ok, _} = Presence.track(socket, name, %{vote: -1})
+    # Send the current presence state to the newly joined client
     push(socket, "presence_state", Presence.list(socket))
     {:noreply, socket}
   end
