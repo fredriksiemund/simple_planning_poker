@@ -1,8 +1,8 @@
-<div>
+<div x-data="contactForm()">
   <div class="vote">
-    <label for="vote-input">Your vote:</label>
-    <input type="number" id="vote-input" min="0" />
-    <button id="vote-btn">Vote</button>
+    <label>Your vote:</label>
+    <input type="number" id="vote-input" min="0" x-model="voteData.vote" />
+    <button id="vote-btn" x-on:click="channel.vote(voteData.vote)">Vote</button>
   </div>
   
   <div class="players">
@@ -15,11 +15,35 @@
   </div>
 
 
-  <div id="join-modal" class="modal">
+  <div id="join-modal" class="modal" x-show="modalIsOpen">
     <div class="modal-inner">
-      <label for="name-field">Your name</label>
-      <input id="name-field" type="text" />
-      <button id="join-btn">Join</button>
+      <form x-on:submit.prevent="submitForm">
+        <label>Your name</label>
+        <input type="text" name="name" required x-model="joinData.name" />
+        <input type="submit" value="Join" :disabled="formIsLoading" />
+      </form>
     </div>
   </div>
 </div>
+
+<script defer>
+  function contactForm() {
+    return {
+      joinData: {
+        name: "",
+      },
+      voteData: {
+        vote: 0,
+      },
+      formIsLoading: false,
+      modalIsOpen: true,
+      channel: null,
+      submitForm() {
+        this.formIsLoading = true
+        this.channel = new window.Channel("<%= @game_id %>", this.joinData.name)
+        this.channel.join()
+        this.modalIsOpen = false
+      },
+    };
+  }
+</script>

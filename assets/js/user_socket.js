@@ -3,52 +3,39 @@ import { Socket, Presence } from "phoenix";
 const socket = new Socket("/socket", { params: { token: window.userToken } });
 socket.connect();
 
-function renderOnlineUsers(presence) {
-  let response = "";
+function Channel(gameId, name) {
+  this.channel = socket.channel(`game:${gameId}`, { name });
+  this.presence = new Presence(this.channel);
+  this.presence.onSync(() => this.renderPlayers());
 
-  presence.list((id, { metas: [first] }) => {
-    response += `
-<div class="player">
-  <div class="card">
-    ${first.vote === -1 ? "" : first.vote}
-  </div>
-  <div class="name">
-    ${id}
-  </div>
-</div>
-    `;
-  });
-
-  document.querySelector(".players").innerHTML = response;
-}
-
-const match = document.location.pathname.match(/\/games\/([0-9a-fA-F\-]{36})$/);
-
-if (match) {
-  document.querySelector("#join-btn").addEventListener("click", () => {
-    const id = match[1];
-    const name = document.querySelector("#name-field").value;
-    const channel = socket.channel(`game:${id}`, { name });
-    const presence = new Presence(channel);
-    presence.onSync(() => renderOnlineUsers(presence));
-
-    const joinDiv = document.querySelector("#join-modal");
-    joinDiv.style.display = "none";
-
-    channel
+  this.join = function () {
+    this.channel
       .join()
-      .receive("ok", (resp) => {
-        console.log("Joined successfully", resp);
-      })
-      .receive("error", (resp) => {
-        console.log("Unable to join", resp);
-      });
+      .receive("error", (err) => console.log("Failed to join: ", err));
+  };
 
-    document.querySelector("#vote-btn").addEventListener("click", () => {
-      const content = document.querySelector("#vote-input").value;
-      channel.push("vote:set", { vote: content });
+  this.vote = function (input) {
+    this.channel.push("vote:set", { vote: input });
+  };
+
+  this.renderPlayers = function () {
+    let response = "";
+
+    this.presence.list((id, { metas: [first] }) => {
+      response += `
+      <div class="player">
+        <div class="card">
+          ${first.vote === -1 ? "" : first.vote}
+        </div>
+        <div class="name">
+          ${id}
+        </div>
+      </div>
+    `;
     });
-  });
+
+    document.querySelector(".players").innerHTML = response;
+  };
 }
 
-export default socket;
+window.Channel = Channel;
