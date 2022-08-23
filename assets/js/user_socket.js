@@ -25,15 +25,15 @@ function renderOnlineUsers(presence) {
 const match = document.location.pathname.match(/\/games\/([0-9a-fA-F\-]{36})$/);
 
 if (match) {
-  document.querySelector("#joinButton").addEventListener("click", () => {
-    const name = document.querySelector("#nameField").value;
-    const joinDiv = document.querySelector(".join");
-    joinDiv.style.display = "none";
-
+  document.querySelector("#join-btn").addEventListener("click", () => {
     const id = match[1];
+    const name = document.querySelector("#name-field").value;
     const channel = socket.channel(`game:${id}`, { name });
     const presence = new Presence(channel);
     presence.onSync(() => renderOnlineUsers(presence));
+
+    const joinDiv = document.querySelector("#join-modal");
+    joinDiv.style.display = "none";
 
     channel
       .join()
@@ -44,8 +44,8 @@ if (match) {
         console.log("Unable to join", resp);
       });
 
-    document.querySelector("#voteButton").addEventListener("click", () => {
-      const content = document.querySelector("#vote").value;
+    document.querySelector("#vote-btn").addEventListener("click", () => {
+      const content = document.querySelector("#vote-input").value;
       channel.push("vote:set", { vote: content });
     });
   });
