@@ -17,8 +17,20 @@
   border: 1px solid #eeeeee;
   background-color: #eeeeee;
   border-radius: 8px;
-  height: 80px;
-  width: 64px
+  height: 136px;
+  width: 96px;
+}
+
+.card-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 28px;
+}
+
+.name {
+  font-size: 16px;
 }
 
 .front-down {

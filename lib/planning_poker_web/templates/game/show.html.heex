@@ -5,13 +5,15 @@
     <button id="vote-btn" x-on:click="channel.vote(voteData.vote)">Vote</button>
   </div>
   
-  <div class="players">
-    <%# <div class="player">
-      <div class="card" />
-      <div class="name">
-        Fredrik
-      </div>
-    </div> %>
+  <div class="players" x-data>
+    <template x-for="user in $store.players.data">
+        <div class="player">
+          <div class="card">
+            <div class="card-inner" x-text="user.vote" />
+          </div>
+          <div class="name" x-text="user.name" />
+        </div>
+    </template>
   </div>
 
 

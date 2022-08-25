@@ -7,13 +7,15 @@ defmodule PlanningPokerWeb.GameChannel do
     {:ok, assign(socket, :name, name)}
   end
 
-  def handle_in("vote:set", %{"vote" => vote}, %{assigns: %{name: name}} = socket) do
-    {:ok, _} = Presence.update(socket, name, %{vote: vote})
+  def handle_in("vote:set", %{"vote" => vote}, socket) do
+    # Replace a presence's metadata by passing a new map _OR_ a function that takes the current map and returns a new one.
+    {:ok, _} = Presence.update(socket, :users, fn (map) -> %{map | vote: vote} end)
     {:noreply, socket}
   end
 
-  def handle_info(:after_join, %{assigns: %{name: name}} = socket) do
-    {:ok, _} = Presence.track(socket, name, %{vote: -1})
+  def handle_info(:after_join, socket) do
+    %{assigns: %{name: name}} = socket
+    {:ok, _} = Presence.track(socket, :users, %{name: name, vote: -1})
     # Send the current presence state to the newly joined client
     push(socket, "presence_state", Presence.list(socket))
     {:noreply, socket}
