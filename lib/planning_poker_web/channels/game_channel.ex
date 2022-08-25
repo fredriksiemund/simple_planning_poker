@@ -13,6 +13,11 @@ defmodule PlanningPokerWeb.GameChannel do
     {:noreply, socket}
   end
 
+  def handle_in("reveal", %{"isRevealed" => is_revealed}, socket) do
+    {:ok, _} = Presence.track(socket, :isRevealed, %{ value: is_revealed})
+    {:noreply, socket}
+  end
+
   def handle_info(:after_join, socket) do
     %{assigns: %{name: name}} = socket
     {:ok, _} = Presence.track(socket, :users, %{name: name, vote: -1})

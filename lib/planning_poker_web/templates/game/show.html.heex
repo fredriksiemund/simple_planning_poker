@@ -1,28 +1,47 @@
 <div x-data="contactForm()">
-  <div class="vote">
-    <label>Your vote:</label>
-    <input type="number" id="vote-input" min="0" x-model="voteData.vote" />
-    <button id="vote-btn" x-on:click="channel.vote(voteData.vote)">Vote</button>
+  <div class="top-bar">
+    <div class="vote-form">
+      <label>Your vote:</label>
+      <input type="number" id="vote-input" min="0" x-model="voteData.vote" />
+      <button
+        class="margin-0"
+        x-on:click="channel.push('vote:set', { vote: parseInt(voteData.vote) })"
+      >
+        Vote
+      </button>
+    </div>
+
+    <button
+      x-on:click="channel.push('reveal', { isRevealed: true })"
+      x-bind:disabled="$store.game.isRevealed"
+      class="margin-bottom-0"
+    >
+      Reveal
+    </button>
+    
   </div>
-  
+
   <div class="players" x-data>
-    <template x-for="user in $store.players.data">
+    <template x-for="user in $store.game.players">
         <div class="player">
-          <div class="card">
-            <div class="card-inner" x-text="user.vote" />
+          <div class="card" :class="{'card-with-vote': user.vote != -1, 'card-revealed': $store.game.isRevealed}">
+            <div class="card-inner">
+              <div x-text="user.vote" x-show="$store.game.isRevealed && user.vote != -1" />
+            </div>
           </div>
           <div class="name" x-text="user.name" />
         </div>
     </template>
   </div>
 
-
   <div id="join-modal" class="modal" x-show="modalIsOpen">
     <div class="modal-inner">
-      <form x-on:submit.prevent="submitForm">
+      <form x-on:submit.prevent="submitForm" class="margin-bottom-0">
         <label>Your name</label>
-        <input type="text" name="name" required x-model="joinData.name" />
-        <input type="submit" value="Join" :disabled="formIsLoading" />
+        <div class="flex-row">
+          <input type="text" name="name" required x-model="joinData.name" />
+          <input type="submit" value="Join" :disabled="formIsLoading" />
+        </div>
       </form>
     </div>
   </div>

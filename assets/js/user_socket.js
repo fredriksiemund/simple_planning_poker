@@ -6,10 +6,14 @@ socket.connect();
 
 window.Alpine = Alpine;
 
-Alpine.store("players", {
-  data: [],
-  setPlayers(data) {
-    this.data = data;
+Alpine.store("game", {
+  players: [],
+  isRevealed: false,
+  setPlayers(players) {
+    this.players = players;
+  },
+  setIsRevealed(newIsRevealed) {
+    this.isRevealed = newIsRevealed;
   },
 });
 
@@ -26,14 +30,17 @@ function Channel(gameId, name) {
       .receive("error", (err) => console.log("Failed to join: ", err));
   };
 
-  this.vote = function (input) {
-    this.channel.push("vote:set", { vote: parseInt(input) });
+  this.push = function (topic, data) {
+    this.channel.push(topic, data);
   };
 
   this.onSync = function () {
     this.presence.list((id, { metas }) => {
       if (id === "users") {
-        Alpine.store("players").setPlayers(metas);
+        Alpine.store("game").setPlayers(metas);
+      }
+      if (id === "isRevealed") {
+        Alpine.store("game").setIsRevealed(metas[0].value);
       }
     });
   };
