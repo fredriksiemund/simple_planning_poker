@@ -1,0 +1,52 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.card-base {
+  background-color: #eeeeee;
+  border-radius: 8px;
+  height: 136px;
+  width: 96px;
+}
+
+.card-with-vote {
+  background-color: $primary;
+}
+
+.card-revealed {
+  border: 1px solid #31708f;
+  background-color: white;
+}
+
+.card-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 28px;
+}
+
+.front-down {
+  border-color: #31708f;
+  background-color: #31708f;
+}
+
+.join-modal {
+  position: fixed; /* Stay in place */
+  top: 0;
+  left: 0;
+  z-index: 1; /* Sit on top */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  backdrop-filter: blur(6px);
+}
+
+.join-modal-inner {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 0.5em;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
