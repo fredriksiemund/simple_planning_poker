@@ -22,7 +22,7 @@
 
         <div class="col">
           <button
-            x-on:click="channel.push('reveal', { isRevealed: true })"
+            x-on:click="channel.push('vote:reveal', { revealed: true })"
             x-bind:disabled="$store.game.isRevealed || $store.game.players.every((p) => p.vote === -1)"
             class="btn btn-success float-end"
           >

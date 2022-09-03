@@ -35,14 +35,12 @@ function Channel(gameId, name) {
   };
 
   this.onSync = function () {
-    this.presence.list((id, { metas }) => {
-      if (id === "users") {
-        Alpine.store("game").setPlayers(metas);
-      }
-      if (id === "isRevealed") {
-        Alpine.store("game").setIsRevealed(metas[0].value);
-      }
+    const players = [];
+    this.presence.list((id, { metas: [data] }) => {
+      players.push(data);
     });
+    Alpine.store("game").setPlayers(players);
+    Alpine.store("game").setIsRevealed(players.find((p) => p.revealed));
   };
 }
 
