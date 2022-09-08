@@ -8,6 +8,8 @@ defmodule PlanningPoker.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Start the Ecto repository
+      PlanningPoker.Repo,
       # Start the Telemetry supervisor
       PlanningPokerWeb.Telemetry,
       # Start the PubSub system

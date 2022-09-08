@@ -7,6 +7,9 @@
 # General application configuration
 import Config
 
+config :planning_poker,
+  ecto_repos: [PlanningPoker.Repo]
+
 # Configures the endpoint
 config :planning_poker, PlanningPokerWeb.Endpoint,
   url: [host: "localhost"],

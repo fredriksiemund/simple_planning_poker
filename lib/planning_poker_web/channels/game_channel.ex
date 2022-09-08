@@ -17,6 +17,11 @@ defmodule PlanningPokerWeb.GameChannel do
     {:noreply, socket}
   end
 
+  def handle_in("vote:reset", %{"reset" => _reset}, socket) do
+    # Clear from db
+    {:noreply, socket}
+  end
+
   def handle_info(:after_join, %{assigns: %{id: id, name: name}} = socket) do
     {:ok, _} = Presence.track(socket, id, %{name: name, vote: -1, revealed: false})
     # Send the current presence state to the newly joined client

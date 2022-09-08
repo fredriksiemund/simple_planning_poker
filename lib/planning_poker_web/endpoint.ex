@@ -13,8 +13,8 @@ defmodule PlanningPokerWeb.Endpoint do
   # socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   socket "/socket", PlanningPokerWeb.UserSocket,
-      websocket: true,
-      longpoll: false
+    websocket: true,
+    longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -32,6 +32,7 @@ defmodule PlanningPokerWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :planning_poker
   end
 
   plug Plug.RequestId
