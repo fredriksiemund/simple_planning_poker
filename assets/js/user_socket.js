@@ -27,6 +27,7 @@ function Channel(gameId, name) {
   this.join = function () {
     this.channel
       .join()
+      .receive("ok", (res) => console.log(res))
       .receive("error", (err) => console.log("Failed to join: ", err));
   };
 
